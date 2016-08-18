@@ -1,13 +1,14 @@
 import numpy as np
 import requests as http
 import pprint
+import matplotlib.pyplot as plt
 
 library_data = {}
-token = 'BQBOCBoZ9vzHbQl01hfc_eOV9zFRqyY90ge1mSYYHU_BIrLuSIVFXLJ7LpjmR_m2F3KZdvP8Xp4ovmOEuSgD3q0q2elxG__PkoRzrGUm0nppn68Fn9e-yGC6pa8LSH91lXlzME5Lz5n-OwTd-hHew4kUXOWGbI5m'
+token = 'BQDbsvFc9MubOSygIqfV1wxiIhYKjdi7MHDkyQAT3ywFhmhJYkseKuJBdorCuSXcBBaS4D7P0VbFWLxn6_cTvUmx1VZO2hgR-RdmwjmnJfjjb5SVKDEyhSyDSASz_TUvLbU8WcAVUd9lCRmImE2KYohgpB0A2VpB'
 api_base = 'https://api.spotify.com/v1'
 api_library = api_base + '/me/tracks'
 api_artists = api_base + '/artists'
-
+edm_words = ['edm' , 'big' , 'beat' , 'step' , 'dance' , 'house' , 'progressive' , 'trance', 'trap']
 def add_artists(artists):
     for artist in artists:
         artist_name = artist['name']
@@ -23,12 +24,21 @@ def determine_genres(ids):
     for id in ids:
         string += id + ','
     string = string.rstrip(',')
-    print("\n\n\n" + string)
     artists_get_result = http.get(api_artists + '?ids=' + string, headers={'Authorization': 'Bearer ' + token})
     json = artists_get_result.json()
     for artist in json['artists']:
         genres.append(artist['genres'])
     return genres
+
+def str_check(words, word):
+    print(word)
+    if len(words) > 0:
+        if words[0] in word:
+            return True
+        else:
+            return str_check(words[1:], word)
+    else:
+        return False
 
 # token is temporary
 
@@ -82,14 +92,49 @@ for specific_artist in artists_genres:
 
 
 
-## visualize result
+## textual visualization result
 
 pprint.pprint(library_data)
 pprint.pprint(genre_count)
 print(len(library_data))
 print(total_artists)
 genre_keys = genre_count.keys()
-count = 0
+generic_genre_count = {
+    'pop': 0,
+    'edm': 0,
+    'rap': 0,
+    'alternative': 0,
+    'other': 0
+}
 for key in genre_keys:
-    count += genre_count[key]['count']
-print(count)
+    if str_check(edm_words, key):
+        generic_genre_count['edm'] += 1
+    elif 'rap' in key:
+        generic_genre_count['rap'] += 1
+    elif 'alternative' in key:
+        generic_genre_count['alternative'] += 1
+    elif 'pop' in key:
+        generic_genre_count['pop'] += 1
+    else:
+        generic_genre_count['other'] += 1
+
+print("the number of genres identified is " + str(len(genre_keys)))
+
+pprint.pprint(generic_genre_count)
+
+labels = ['Alternative', 'EDM', 'Other', 'Pop', 'Rap']
+sizes = [
+    generic_genre_count['alternative'],
+    generic_genre_count['edm'],
+    generic_genre_count['other'],
+    generic_genre_count['pop'],
+    generic_genre_count['rap']
+]
+colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'blue']
+explode = [0, 0.2, 0, 0, 0]
+# Plot
+plt.pie(sizes, explode=explode, labels=labels, colors=colors,
+        autopct='%1.1f%%', shadow=True, startangle=140)
+
+plt.axis('equal')
+plt.show()
