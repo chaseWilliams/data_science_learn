@@ -3,7 +3,7 @@ import requests as http
 import pprint
 
 library_data = {}
-token = 'BQCI9cMCsb0v6xax3nvWHK5D2LP84xclp_oYQJGKNeeGGgShN0yzzV_Sql4lZ1qGBDZGmSNFkkfxd6FlNLftkYHZDFjSpj-PQxDi9HaANdl0usB2-WyPewSzCgJ-_QIPR0H1nxLRuI28VxgGjHJ69ZDTfLC5pXUV'
+token = 'BQDTWMPn1EMRk-u2DN74mEK-X-BxGTM3oqxRTFgsHyGRiCt3Z3ie_ilygpXK0RULAt8iN1iOgslhBFW4hlrwI_Pxy-kRX1XMmNKXF63Y63jZfSnPLuRhm55qT3NnOcSfp38kIxroIs5A4lBkkCnCB0EawFtdZ5MB'
 api_base = 'https://api.spotify.com/v1'
 api_library = api_base + '/me/tracks'
 api_artists = api_base + '/artists'
@@ -22,7 +22,7 @@ def determine_genres(ids):
     genres = [] # each elem's index corresponds with ids' index
     for id in ids:
         string += id
-    response = http.get(api_artists + '?ids=' + string, {'Authorization': 'Bearer ' + token})
+    response = http.get(api_artists + '?ids=' + string, headers={'Authorization': 'Bearer ' + token})
     json = response.json()
     for artist in json['artists']:
         genres.append(artist['genres'])
@@ -30,7 +30,7 @@ def determine_genres(ids):
 
 # token is temporary
 
-response = http.get(api_library + '?limit=1', {'Authorization': 'Bearer ' + token})
+response = http.get(api_library + '?limit=1', headers={'Authorization': 'Bearer ' + token})
 result = response.json()
 total_songs = result['total']
 # adds an initial song
@@ -49,6 +49,12 @@ for offset in list(range(1, total_songs, 50)):
 ## Figure out what genre the artists are from
 
 keys = library_data.keys()
+for index in list(range(1, total_songs, 50)):
+    sub_arr = keys[:index]
+    string = ''
+    for key in sub_arr:
+        string += library_data[key]['id']
+    string.index(0, str)
 
 
 ## visualize result
