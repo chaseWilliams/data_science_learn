@@ -119,6 +119,8 @@ for key in genre_keys:
         generic_genre_count['other'] += 1
 
 print("the number of genres identified is " + str(len(genre_keys)))
+print("number of songs" + str(total_songs))
+print("number of artists" + str(total_artists))
 
 pprint.pprint(generic_genre_count)
 
