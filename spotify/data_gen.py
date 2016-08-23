@@ -4,7 +4,7 @@ import pprint
 import matplotlib.pyplot as plt
 
 library_data = {}
-token = 'BQCy7D6D5lUKJ0LVkbO07I5iygBtx0nZSwYyuapyzREOtkDpg80XDmTxn2N6ZB116suyCB0YuwCrsZva1TnBai5sE4zbKPLDZYkLoeMZZFRxGX1PHKaKwnmBct2sxAKzBpRzm2Z797fXWDR78S0'
+token = 'BQBUaD3_sEXuoKB2cJxHUgSi0jUqHqp5H1EZZMvryJHg0JJ7c4PPPambwDEt1QOWi7JQCawGUIN1wPn40J3N0ZZuaQv_aom8g4Tb8ZjNKCkmW8GuGGVGvHqchNwIgghbksEAa_tHQNKfbQ7yx9w'
 api_base = 'https://api.spotify.com/v1'
 api_library = api_base + '/me/tracks'
 api_artists = api_base + '/artists'
@@ -138,4 +138,12 @@ plt.pie(sizes, explode=explode, labels=labels, colors=colors,
         autopct='%1.1f%%', shadow=True, startangle=140)
 
 plt.axis('equal')
-plt.show()
+#plt.show()
+count = 0
+for key in library_data.keys():
+    if library_data[key]['count'] >= 3:
+        print(key)
+        print(library_data[key]['count'])
+        count += 1
+print(count)
+print(float(count) / float(total_artists))
