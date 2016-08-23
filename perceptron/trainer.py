@@ -29,67 +29,52 @@ plt.legend(loc='upper left')
 
 plt.tight_layout()
 #plt.savefig('./images/02_06.png', dpi=300)
-#plt.show()
-
-ppn = Perceptron(X, y)
-ppn.train()
-print(ppn.str())
-plt.close()
-print(ppn.errors_)
-plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_, marker='o')
-plt.xlabel('Epochs')
-plt.ylabel('Number of misclassifications')
-
-plt.tight_layout()
-# plt.savefig('./perceptron_1.png', dpi=300)
 plt.show()
+def train_perceptron(ppn):
+    ppn.train()
+    plt.close()
+    plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_, marker='o')
+    plt.xlabel('Epochs')
+    plt.ylabel('Number of misclassifications')
 
-# determine accuracy
-ones = np.ones(100)
-trial_x = np.c_[ones.T, X]
-correct = 0
-incorrect = 0
-for training_sample, true_y in zip(trial_x, y):
-    result = ppn.activator(ppn.net_input(training_sample)) - true_y
-    if result == 0:
-        correct += 1
-    else:
-        incorrect += 1
+    plt.tight_layout()
+    # plt.savefig('./perceptron_1.png', dpi=300)
+    plt.show()
 
-print(correct, incorrect)
+    # determine accuracy
+    ones = np.ones(100)
+    trial_x = np.c_[ones.T, X]
+    correct = 0
+    incorrect = 0
+    for training_sample, true_y in zip(trial_x, y):
+        result = ppn.activator(ppn.net_input(training_sample)) - true_y
+        if result == 0:
+            correct += 1
+        else:
+            incorrect += 1
+    print('The percent correct is ' + str(float(correct) / float(correct + incorrect) * 100) + '%')
 
+    from matplotlib.colors import ListedColormap
 
-from matplotlib.colors import ListedColormap
+    plt.close()
+    h = .02
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    ones = np.ones(xx.ravel().shape[0])
+    Z = ppn.predict(np.c_[np.c_[ones.T,xx.ravel()],yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    fig, ax = plt.subplots()
+    ax.contourf(xx, yy, Z, cmap=plt.cm.Paired)
+    ax.axis('off')
 
-plt.close()
-def plot_decision_regions(X, y, classifier, resolution=0.02):
+    # Plot also the training points
+    ax.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Paired)
 
-    # setup marker generator and color map
-    markers = ('s', 'x', 'o', '^', 'v')
-    colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
-    cmap = ListedColormap(colors[:len(np.unique(y))])
+    ax.set_title('Perceptron')
+    plt.show()
 
-    # plot the decision surface
-    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution),
-                           np.arange(x2_min, x2_max, resolution))
-    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
-    Z = Z.reshape(xx1.shape)
-    plt.contourf(xx1, xx2, Z, alpha=0.4, cmap=cmap)
-    plt.xlim(xx1.min(), xx1.max())
-    plt.ylim(xx2.min(), xx2.max())
-
-    # plot class samples
-    for idx, cl in enumerate(np.unique(y)):
-        plt.scatter(x=X[y == cl, 0], y=X[y == cl, 1],
-                    alpha=0.8, c=cmap(idx),
-                    marker=markers[idx], label=cl)
-plot_decision_regions(X, y, classifier=ppn)
-plt.xlabel('sepal length [cm]')
-plt.ylabel('petal length [cm]')
-plt.legend(loc='upper left')
-
-plt.tight_layout()
-# plt.savefig('./perceptron_2.png', dpi=300)
-plt.show()
+train_perceptron(Perceptron(X, y))
+train_perceptron(Perceptron(X, y, learning_rate=.1))
+train_perceptron(Perceptron(X, y, learning_rate=1))
