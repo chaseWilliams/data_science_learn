@@ -4,7 +4,7 @@ import pprint
 import matplotlib.pyplot as plt
 
 library_data = {}
-token = 'BQDbsvFc9MubOSygIqfV1wxiIhYKjdi7MHDkyQAT3ywFhmhJYkseKuJBdorCuSXcBBaS4D7P0VbFWLxn6_cTvUmx1VZO2hgR-RdmwjmnJfjjb5SVKDEyhSyDSASz_TUvLbU8WcAVUd9lCRmImE2KYohgpB0A2VpB'
+token = 'BQCy7D6D5lUKJ0LVkbO07I5iygBtx0nZSwYyuapyzREOtkDpg80XDmTxn2N6ZB116suyCB0YuwCrsZva1TnBai5sE4zbKPLDZYkLoeMZZFRxGX1PHKaKwnmBct2sxAKzBpRzm2Z797fXWDR78S0'
 api_base = 'https://api.spotify.com/v1'
 api_library = api_base + '/me/tracks'
 api_artists = api_base + '/artists'
@@ -31,7 +31,6 @@ def determine_genres(ids):
     return genres
 
 def str_check(words, word):
-    print(word)
     if len(words) > 0:
         if words[0] in word:
             return True

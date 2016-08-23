@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Perceptron:
 
     def __init__(self, values, true_output, epochs=10, learning_rate=.01):
@@ -15,12 +16,31 @@ class Perceptron:
         self.w_ = np.zeros((self.m_))
         self.errors_ = []
 
-    def net_input(self):
-        return self.w_.T.dot( self.x_)
+    def net_input(self, x_vec):
+        return self.w_.T.dot(x_vec)
+
+    def activator(self, weighted_x):
+        return 1 if weighted_x >= 0 else -1
 
     def train(self):
-
+        for epoch in range(self.epochs):
+            print('epoch number ' + str(epoch))
+            epoch_errors = 0
+            for training_sample, true_y in zip(self.x_, self.y_):
+                computed_y = self.activator(self.net_input(training_sample))
+                weight_update = self.alpha * (true_y - computed_y) * training_sample.T
+                print('before' + str(self.w_))
+                print(weight_update)
+                self.w_ += weight_update
+                print('after' + str(self.w_))
+                for x in weight_update:
+                    if x != 0:
+                        epoch_errors += 1
+            self.errors_.append(epoch_errors)
         return self
+
+    def predict(self, x):
+        return self.activator(self.net_input(x))
 
     def str(self):
         print(str(self.n_) + "\n" +\
@@ -42,6 +62,7 @@ y = np.array( [1, 4, 7] )
 
 learner = Perceptron(X, y)
 print(learner.str())
-
-print('the dot product is')
-print(learner.net_input())
+learner.train()
+print(learner.str())
+#print('the dot product is')
+#print(learner.net_input(np.array([ 1, 4, 5, 6])))
