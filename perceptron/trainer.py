@@ -32,6 +32,7 @@ plt.tight_layout()
 plt.show()
 def train_perceptron(ppn):
     ppn.train()
+    print(ppn.w_)
     plt.close()
     plt.plot(range(1, len(ppn.errors_) + 1), ppn.errors_, marker='o')
     plt.xlabel('Epochs')
@@ -54,8 +55,6 @@ def train_perceptron(ppn):
             incorrect += 1
     print('The percent correct is ' + str(float(correct) / float(correct + incorrect) * 100) + '%')
 
-    from matplotlib.colors import ListedColormap
-
     plt.close()
     h = .02
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
@@ -76,5 +75,3 @@ def train_perceptron(ppn):
     plt.show()
 
 train_perceptron(Perceptron(X, y))
-train_perceptron(Perceptron(X, y, learning_rate=.1))
-train_perceptron(Perceptron(X, y, learning_rate=1))
