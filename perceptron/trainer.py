@@ -9,7 +9,7 @@ def label(elem):
     return 1 if elem == 'Iris-setosa' else -1
 def activate(input):
     return 1 if input >= 0 else -1
-data_frame = pd.read_csv('./Iris.csv')
+data_frame = pd.read_csv('../Iris.csv')
 y = data_frame.iloc[0:100, 5].values
 
 for element in np.nditer(y, flags=['refs_ok'],op_flags=['readwrite']):
