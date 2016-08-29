@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from adaline import AdalineGD
 
-
+exit
 def label(elem):
     elem = elem.tolist()
     return 1 if elem == 'Iris-setosa' else -1
@@ -36,3 +36,5 @@ ax[1].set_title('Adaline - Learning rate 0.0001')
 plt.tight_layout()
 # plt.savefig('./adaline_1.png', dpi=300)
 plt.show()
+
+# im not very smart
