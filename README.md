@@ -34,6 +34,13 @@ matplotlib # open source data visualization tool, adapted from Matlab to Python
 
 ### Acquiring and Preprocessing the Data
 
+
 ### Training with the Data
 
+
 ### Visualize the Results
+
+
+![picture][data_pic]
+
+[data_pic]: https://raw.githubusercontent.com/chaseWilliams/data_science_learn/master/images/data_3d.png "Picture of Data"
