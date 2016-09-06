@@ -2,7 +2,8 @@
 Learning how to utilize data science libraries
 
 
-# Tutorial
+# Crash Course on Machine Learning
+
 
 Learn how to go and start doing machine learning
 
@@ -10,7 +11,6 @@ Learn how to go and start doing machine learning
 * Familiarity with Python
 * Knowledge of basic linear algebra (matrices)
     * Multivariate calculus is a definite plus, but not required
-* Your own copy of [Python Machine Learning](https://www.amazon.com/Python-Machine-Learning-Sebastian-Raschka/dp/1783555130) (and check out the code at the [GitHub](https://github.com/rasbt/python-machine-learning-book))
 * The [data](https://archive.ics.uci.edu/ml/machine-learning-databases/haberman/haberman.data)
 
 Note that you can also clone this repository for the example code and the associated data, under the subfolder `haberman`.
@@ -82,11 +82,77 @@ X_test_std = scaler.transform(X_test)
 ```
 Note that even though we call `transform` twice on separate data, it uses the exact same standardization factors because we fit it to our training data. Thus, we ensure that both the training and testing data is scaled down the same.
 ### Training with the Data
-In order to fit the data, we'll use `scikit-learn`
+In order to fit the data, we'll use `scikit-learn`. We imported the Perceptron class, which is the algorithm we'll use for fitting the data. The perceptron works by adjusting a set of weights - a value determining the importance of a given feature - so that the weights and a training sample accurately predicts the class label (what type the training sample is, which in this case is whether or not the patient survived). Training the perceptron is extremely easy. Check it out:
+```python
+ppn = Perceptron(n_iter=50, eta0=0.01, random_state=0)
+# n_iter is how many times it goes over the data
+# eta is the learning rate
+ppn.fit(X_train_std, y_train)
+```
+Boom! That's it! Now our perceptron object `ppn` has initialized and set its weights to the training data. To test it on our testing data, first we'll obtain the predicted class labels:
+```python
+y_pred = ppn.predict(X_test_std)
+```
+Now with our array of predictions, we'll count up the number of misclassifications:
+```python
+misclassified = (y_pred != y_test).sum()
+```
+And then print out our computed results:
+```python
+print('Misclassified samples: %d' % misclassified)
+print('Perceptron accurateness: %d%%' % ((1 - float(misclassified.item()) / float(X.shape[0])) * 100))
+```
+That's all there is to training on and predicting with our data! `scikit-learn` makes it incredibly easy for us.
 
 ### Visualize the Results
+The library `matplotlib` makes plotting data much easier than it normally would be, so that even during development we can take a peek at what our data looks like. Normally in reality, visualizing is a little tough since data tends to be multi-dimensional and beyond the scope of a mere yes-or-no algorithm, but in this case we can intuitively view our data. Since we have three features and two class labels (survived/died), we'll attempt to draw up a 3-D scatterplot of our data, where each data point's axis is the features and the color and shape of the data point is determined by which class label it is. Note that when we visualize our data, we are doing it off of the actual results, although we could tweak it to use our perceptron's prediction and show how accurate it is.
 
+In order to start playing with matplotlib's functions, we'll first to import it
+```python
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+```
+Once we have our visual aid libraries imported, we'll initiate setup by initializing our figure:
+```python
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+```
+Now we have a 3-D scatter plot ready to go. While we could just plot our X data matrix right now, the problem is that `matplotlib` doesn't automatically determine the class labels. So, we'll break our X matrix into a `x_pos` and a `x_neg` matrix, and just sequentially plot the two with different markers.
+```python
+x_pos = np.empty((0,3), int)
+x_neg = np.empty((0,3), int)
+```
+Now our matrices are ready, but we must fill them now. To do so, we'll simply loop through our data and append to the respective matrix.
+```python
+X = X.values #get the ndarray
+for sample, answer in zip(X, Y):
+    if answer == 1:
+        x_pos = np.vstack((x_pos, sample))
+    else:
+        x_neg = np.vstack((x_neg, sample))
+```
+The syntax `for x, y in zip(array1, array2)` basically lets us loop through two matrices of the same length so that we conserve the same index. That way, when our training sample within X has the associated positive class label, we can act on that, and vice versa holds true. `vstack` is a `numpy` method that takes a tuple of a base and additional matrix, and stacks them so that there are a total of additional rows - as opposed to columns - for the base matrix. At the end of the looping, our two matrices will hold all their respective training samples.
+```python
+x1 = x_pos[:, 0]
+y1 = x_pos[:, 1]
+z1 = x_pos[:, 2]
+x2 = x_neg[:, 0]
+y2 = x_neg[:, 1]
+z2 = x_neg[:, 2]
+
+ax.scatter(x1, y1, z1, c='r', marker='o')
+ax.scatter(x2, y2, z2, c='b', marker='+')
+# the arg 'c' is color
+ax.set_xlabel('Age')
+ax.set_ylabel('Year (1900s)')
+ax.set_zlabel('Nodes')
+
+plt.show()
+```
+The first six lines are where we break apart the positive and negative matrices into the individual features, followed by their plotting, and then setting the axis labels. That's pretty much all there is two plotting our data! We could go on and add a title and a legend, but now you get the basic gist of it. Congrats on finishing my crash course on machine learning with perceptrons, and good luck to future learning and applications of it!
 
 ![picture][data_pic]
 
 [data_pic]: https://raw.githubusercontent.com/chaseWilliams/data_science_learn/master/images/data_3d.png "Picture of Data"
+
+For future resources, use a copy of [Python Machine Learning](https://www.amazon.com/Python-Machine-Learning-Sebastian-Raschka/dp/1783555130) (and check out the code at the [GitHub](https://github.com/rasbt/python-machine-learning-book)).
