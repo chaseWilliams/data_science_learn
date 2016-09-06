@@ -156,3 +156,13 @@ The first six lines are where we break apart the positive and negative matrices 
 [data_pic]: https://raw.githubusercontent.com/chaseWilliams/data_science_learn/master/images/data_3d.png "Picture of Data"
 
 For future resources, use a copy of [Python Machine Learning](https://www.amazon.com/Python-Machine-Learning-Sebastian-Raschka/dp/1783555130) (and check out the code at the [GitHub](https://github.com/rasbt/python-machine-learning-book)).
+
+Citations:
+
+John D. Hunter, "Matplotlib: A 2D Graphics Environment", *Computing in Science & Engineering*, vol.9, no. 3, pp. 90-95, May/June 2007, doi:10.1109/MCSE.2007.55
+
+[Scikit-learn: Machine Learning in Python](http://jmlr.csail.mit.edu/papers/v12/pedregosa11a.html), Pedregosa et al., JMLR 12, pp. 2825-2830, 2011.
+
+Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. The NumPy Array: A Structure for Efficient Numerical Computation, Computing in Science & Engineering, 13, 22-30 (2011)
+
+Wes McKinney. Data Structures for Statistical Computing in Python, Proceedings of the 9th Python in Science Conference, 51-56 (2010)
