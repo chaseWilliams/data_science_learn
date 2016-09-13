@@ -72,6 +72,12 @@ plt.show()
 
 # demonstrate the effect of changing the hyperparameters
 svm_generate(X, y, 0.1, 10.0, 'regular')
+svm_generate(X, y, 10, 10.0, 'big gamma value')
+svm_generate(X, y, 100, 10.0, 'bigger gamma value')
+svm_generate(X, y, 0.001, 10.0, 'smaller gamma value')
+svm_generate(X, y, 0.1, 0.1, 'small C (tolerance) value')
+svm_generate(X, y, 0.1, 0.01, 'smaller C value')
+svm_generate(X, y, 0.1, 100, 'big C value')
 
 # contrast it with a perceptron
 ppn = Perceptron(n_iter=200, eta0=0.01, random_state=0)
