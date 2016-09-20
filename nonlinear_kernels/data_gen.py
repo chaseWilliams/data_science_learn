@@ -49,6 +49,7 @@ def plot_decision_regions(X, y, classifier, test_idx=None, resolution=0.02):
                     s=55, label='test set')
 
 def svm_generate(X, y, gamma, c_value, title):
+    plt.close()
     svm = SVC(kernel='rbf', random_state=0, gamma=gamma, C=c_value)
     svm.fit(X, y)
     plot_decision_regions(X, y, classifier=svm)
@@ -80,8 +81,9 @@ svm_generate(X, y, 0.1, 0.01, 'smaller C value')
 svm_generate(X, y, 0.1, 100, 'big C value')
 
 # contrast it with a perceptron
+plt.close()
 ppn = Perceptron(n_iter=200, eta0=0.01, random_state=0)
 ppn.fit(X, y)
 plot_decision_regions(X, y, classifier=ppn)
 plt.title('Perceptron with 200 epochs')
-plt.show()
+plt.savefig('perceptron on nonlinearly correlated data')
